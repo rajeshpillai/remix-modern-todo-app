@@ -81,6 +81,10 @@ export default function Index() {
         <div key={todo.id} style={{ border: "1px solid grey", padding: 6, margin: 8 }}>
           <div>{todo.title}</div>
           <div>{todo.status}</div>
+          <button type="button" onClick={() => {}}>
+            Delete
+          </button>
+
         </div>
       ))}
     </div>
