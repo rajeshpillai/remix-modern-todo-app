@@ -1,10 +1,10 @@
 import type { V2_MetaFunction } from "@remix-run/node";
-import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
+import { Form, Link, useLoaderData, useNavigation, useFetcher } from "@remix-run/react";
 // import { PrismaClient, User } from "@prisma/client";
 import { db } from "~/utils/db.server";
 
 
-const todos = [
+let todos = [
   {id: 1, title: "Todo 1", status: "completed"},
   {id: 2, title: "Todo 2", status: "onhold"},
   {id: 3, title: "Todo 3", status: "onhold"},
@@ -28,24 +28,37 @@ export async function loader() {
 export async function action({ request }) {
   const form = await request.formData();
 
-  console.log("POST DATA: ", form.get("title"));
+  console.log("POST DATA: ",request.method,  form.get("title"));
   
-  const newTodo = {
-    id: todos.length + 1,
-    title: form.get("title"),
-    status: form.get("status"),
-  };
+  switch(request.method) {
+    case "DELETE":
+      await handleDelete(form.get("id"));
+      break;
+    case "POST":
+      const newTodo = {
+        id: todos.length + 1,
+        title: form.get("title"),
+        status: form.get("status"),
+      };
+    
+      todos.push(newTodo);
+      break;
+  }
 
-  todos.push(newTodo);
-
-  console.log("users(action): ", newTodo);
   return true;
+}
+
+const handleDelete = async (id) => {
+  console.log("Delete: ", id);
+  todos = todos.filter((todo) => todo.id != id);
+  console.log("Todos: ", todos);
 }
 
 export default function Index() {
   const todos = useLoaderData();
   const navigation = useNavigation();
   const busy = navigation.state === "submitting";
+  const fetcher = useFetcher();
 
   return (
     <div
@@ -81,10 +94,13 @@ export default function Index() {
         <div key={todo.id} style={{ border: "1px solid grey", padding: 6, margin: 8 }}>
           <div>{todo.title}</div>
           <div>{todo.status}</div>
-          <button type="button" onClick={() => {}}>
-            Delete
-          </button>
-
+          <fetcher.Form method="delete">
+            <input type="hidden" name="id" value={todo.id} />
+            <button type="submit">
+              Delete
+            </button>
+          </fetcher.Form>
+          
         </div>
       ))}
     </div>
