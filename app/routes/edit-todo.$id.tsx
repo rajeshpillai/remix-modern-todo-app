@@ -1,5 +1,5 @@
 import type { V2_MetaFunction } from "@remix-run/node";
-import { Form, Link, useLoaderData, useNavigation, useFetcher } from "@remix-run/react";
+import { Form, Link, useParams, useLoaderData, useNavigation, useFetcher } from "@remix-run/react";
 // import { PrismaClient, User } from "@prisma/client";
 import { db } from "~/utils/db.server";
 
@@ -20,41 +20,16 @@ export const meta: V2_MetaFunction = () => {
   ];
 };
 
+export async function loader({ params }) {
+  const todo_id = params?.id;
+  console.log("Editing todo  with id = " + todo_id);
 
-export async function loader() {
-  return todos;
+  return todo_id;
 }
 
-export async function action({ request }) {
-  const form = await request.formData();
 
-  console.log("POST DATA: ",request.method,  form.get("title"));
-  
-  switch(request.method) {
-    case "DELETE":
-      await handleDelete(form.get("id"));
-      break;
-    case "POST":
-      const newTodo = {
-        id: todos.length + 1,
-        title: form.get("title"),
-        status: form.get("status"),
-      };
-    
-      todos.push(newTodo);
-      break;
-  }
 
-  return true;
-}
-
-const handleDelete = async (id) => {
-  console.log("Delete: ", id);
-  todos = todos.filter((todo) => todo.id != id);
-  console.log("Todos: ", todos);
-}
-
-export default function Index() {
+export default function EditTodo() {
   const todos = useLoaderData();
   const navigation = useNavigation();
   const busy = navigation.state === "submitting";
@@ -69,7 +44,7 @@ export default function Index() {
         margin: "auto",
       }}
     >
-      <h2>Todo App</h2>
+      <h2>Edit App</h2>
       <h4>The best remix demo app in the world!</h4>
       <Form method="post">
         <div>
@@ -86,24 +61,9 @@ export default function Index() {
         </div>
 
         <button type="submit" disabled={busy}>
-          {busy ? "Creating..." : "Create New Todo"}
+          {busy ? "Editing..." : "Edit Todo"}
         </button>
       </Form>
-
-      {todos.map((todo) => (
-        <div key={todo.id} style={{ border: "1px solid grey", padding: 6, margin: 8 }}>
-          <div>{todo.title}</div>
-          <div>{todo.status}</div>
-          <fetcher.Form method="delete">
-            <input type="hidden" name="id" value={todo.id} />
-            <button type="submit">
-              Delete
-            </button> | 
-            <Link to={`/edit-todo/${todo.id}`}>Edit</Link>
-          </fetcher.Form>
-          
-        </div>
-      ))}
     </div>
   );
 }
