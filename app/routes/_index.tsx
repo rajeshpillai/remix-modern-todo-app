@@ -99,7 +99,7 @@ export default function Index() {
             <button type="submit">
               Delete
             </button> | 
-            <Link to={`/edit-todo/${todo.id}`}>Edit</Link>
+            <Link prefetch="intent" to={`/edit-todo/${todo.id}`}>Edit</Link>
           </fetcher.Form>
           
         </div>

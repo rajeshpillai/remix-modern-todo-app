@@ -1,7 +1,5 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 import { Form, Link, useParams, useLoaderData, useNavigation, useFetcher } from "@remix-run/react";
-// import { PrismaClient, User } from "@prisma/client";
-import { db } from "~/utils/db.server";
 
 
 let todos = [
@@ -23,14 +21,30 @@ export const meta: V2_MetaFunction = () => {
 export async function loader({ params }) {
   const todo_id = params?.id;
   console.log("Editing todo  with id = " + todo_id);
+  // Get todo from todos array
+  const todo = todos.find((todo) => todo.id == todo_id);
 
-  return todo_id;
+  return todo;
 }
 
-
+export async function action({ request }) {
+  // Get the todo title from the request (form submission)
+  const body = new URLSearchParams(await request.text());
+  const title = body.get("title");
+  const status = body.get("status");
+  const todo_id = body.get("todo_id");
+  // Update the todos array 
+  todos = todos.map((todo) => {
+    if (todo.id == todo_id) {
+      return { ...todo, title, status };
+    }
+    return todo;
+  });
+  return null;
+}  
 
 export default function EditTodo() {
-  const todos = useLoaderData();
+  const todo = useLoaderData();
   const navigation = useNavigation();
   const busy = navigation.state === "submitting";
   const fetcher = useFetcher();
@@ -48,7 +62,7 @@ export default function EditTodo() {
       <h4>The best remix demo app in the world!</h4>
       <Form method="post">
         <div>
-          <input name="title" placeholder="Todo title" size={30} />
+          <input name="title" placeholder="Todo title" size={30} defaultValue={todo.title}/>
         </div>
         <div>
           <select name="status">
@@ -61,7 +75,7 @@ export default function EditTodo() {
         </div>
 
         <button type="submit" disabled={busy}>
-          {busy ? "Editing..." : "Edit Todo"}
+          {busy ? "Editing..." : "Submit"}
         </button>
       </Form>
     </div>
