@@ -20,10 +20,9 @@ export const meta: V2_MetaFunction = () => {
 
 export async function loader({ params }) {
   const todo_id = params?.id;
-  console.log("Editing todo  with id = " + todo_id);
+  console.log("Editing todo  with id = " + todo_id, new Date());
   // Get todo from todos array
   const todo = todos.find((todo) => todo.id == todo_id);
-
   return todo;
 }
 
@@ -45,10 +44,12 @@ export async function action({ request }) {
 
 export default function EditTodo() {
   const todo = useLoaderData();
+  console.log(todo);
+
   const navigation = useNavigation();
   const busy = navigation.state === "submitting";
   const fetcher = useFetcher();
-
+  
   return (
     <div
       style={{
@@ -65,7 +66,7 @@ export default function EditTodo() {
           <input name="title" placeholder="Todo title" size={30} defaultValue={todo.title}/>
         </div>
         <div>
-          <select name="status">
+          <select name="status" defaultValue={todo.status}>
             {todo_status.map((status) => (
               <option key={status} value={status}>
                 {status}
