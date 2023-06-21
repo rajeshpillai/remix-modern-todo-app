@@ -1,5 +1,5 @@
 import type { V2_MetaFunction } from "@remix-run/node";
-import { Form, Link, useParams, useLoaderData, useNavigation, useFetcher } from "@remix-run/react";
+import { Form, Link, useParams, useLoaderData, useNavigation } from "@remix-run/react";
 
 
 let todos = [
@@ -23,7 +23,14 @@ export async function loader({ params }) {
   console.log("Editing todo  with id = " + todo_id, new Date());
   // Get todo from todos array
   const todo = todos.find((todo) => todo.id == todo_id);
-  return todo;
+  return {
+    headers: {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+    },
+    todo
+  }
 }
 
 export async function action({ request }) {
@@ -43,12 +50,11 @@ export async function action({ request }) {
 }  
 
 export default function EditTodo() {
-  const todo = useLoaderData();
+  const {todo} = useLoaderData();
   console.log(todo);
 
   const navigation = useNavigation();
   const busy = navigation.state === "submitting";
-  const fetcher = useFetcher();
   
   return (
     <div
