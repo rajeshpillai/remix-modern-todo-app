@@ -38,12 +38,15 @@ export async function action({ request }) {
         status: form.get("status"),
       };
     
+      // Fetch the first user from DB
+      const user = await db.user.findFirst();
+
       // Add todo to db
       await db.todo.create({
         data: {
           title: newTodo.title,
           status: newTodo.status,
-          userId: 1
+          userId: user?.id || 1
         },
       });
       
