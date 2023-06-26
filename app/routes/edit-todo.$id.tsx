@@ -1,4 +1,4 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import { redirect, type V2_MetaFunction } from "@remix-run/node";
 import { Form, Link, useParams, useLoaderData, useNavigation } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 
@@ -52,7 +52,8 @@ export async function action({ request }) {
     },
   });
 
-  return null;
+  console.log("updatedTodo: ", updatedTodo);
+  return redirect("/");
 }  
 
 export default function EditTodo() {
