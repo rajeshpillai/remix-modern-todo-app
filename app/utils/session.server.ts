@@ -64,12 +64,13 @@ const storage = createCookieSessionStorage({
   },
 });
 
-function getUserSession(request: Request) {
-  return storage.getSession(request.headers.get("Cookie"));
+async function getUserSession(request: Request) {
+  const cookie = request.headers.get("Cookie");
+  return await storage.getSession(cookie);
 }
 
 export async function getUserId(request: Request) {
-  const session = await getUserSession(request);git s
+  const session = await getUserSession(request);
   console.log("Session: ", session);
   const userId = session.get("userId");
   console.log(`Getting user id ${userId}`);
@@ -121,10 +122,12 @@ export async function logout(request: Request) {
 }
 
 export async function createUserSession(
+  request,
   userId: string,
   redirectTo: string
 ) {
-  const session = await storage.getSession();
+  //const session = await storage.getSession();
+  const session = await getUserSession(request);
   session.set("userId: ", userId);
   console.log(`Creating user session for user ${userId} and redirecting to ${redirectTo}`);
   return redirect(redirectTo, {

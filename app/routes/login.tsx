@@ -99,7 +99,7 @@ export const action = async ({ request }: ActionArgs) => {
             "Email/Password combination is incorrect",
         });
       }
-      return createUserSession(user.id, redirectTo);
+      return createUserSession(request, user.id, redirectTo);
     }
     case "register": {
       const userExists = await db.user.findFirst({
