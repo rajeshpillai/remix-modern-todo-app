@@ -1,15 +1,9 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 import { Form, Link, useLoaderData, useNavigation, useFetcher } from "@remix-run/react";
-// import { PrismaClient, User } from "@prisma/client";
+import { Todo } from "@prisma/client";
 import { db } from "~/utils/db.server";
 
 
-let todos = [
-  {id: 1, title: "Todo 1", status: "completed"},
-  {id: 2, title: "Todo 2", status: "onhold"},
-  {id: 3, title: "Todo 3", status: "onhold"},
-  {id: 4, title: "Todo 4", status: "inprogress"},
-];
 
 const todo_status = ["inprogress", "onhold", "completed"];
 
@@ -22,8 +16,12 @@ export const meta: V2_MetaFunction = () => {
 
 
 export async function loader() {
+  const todos = await db.todo.findMany();
+  console.log("todos(loader): ", todos);
+  await db.$disconnect();
   return todos;
 }
+
 
 export async function action({ request }) {
   const form = await request.formData();

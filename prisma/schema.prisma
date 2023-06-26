@@ -24,20 +24,20 @@ model User {
 
   username String
 
-  // With a `BookMark[]` type (one-to-many relationship)
-  // Because each user can have between 0 and an infinite number of bookmarks
-  bookmarks BookMark[]
+  // With a `Todo[]` type (one-to-many relationship)
+  // Because each user can have between 0 and an infinite number of todos
+  todos Todo[]
 }
 
-model BookMark {
+model Todo {
   id Int @id @default(autoincrement())
 
   createdAt DateTime @default(now())
 
   // note about the bookmark
-  text String
+  title String
 
-  url String @default("")
+  status String @default("")
 
   // It will link the `id` of the `User` model
   userId Int
@@ -46,8 +46,8 @@ model BookMark {
   // With a `User` type (many-to-one relationship)
   // Because each bookmark is associated with a user
   // 
-  // We link the `User` to a `Bookmark` based on:
-  // - the `userId` in the `Bookmark` model
+  // We link the `User` to a `Todo` based on:
+  // - the `userId` in the `Todo` model
   // - the `id` in the `User` model
   user User @relation(fields: [userId], references: [id])
 }
