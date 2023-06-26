@@ -21,8 +21,8 @@ model User {
   // - @unique (because we want the user to be unique
   // based on the email - two users can't have the same)
   email String @unique
-
   username String
+  passwordHash String
 
   // With a `Todo[]` type (one-to-many relationship)
   // Because each user can have between 0 and an infinite number of todos

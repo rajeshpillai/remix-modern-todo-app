@@ -1,13 +1,17 @@
+const bcrypt = require("bcrypt");
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
+
 async function main() {
+  const passwordHash = await bcrypt.hash("test@1234", 10);
   const alice = await prisma.user.upsert({
     where: { email: 'alice@prisma.io' },
     update: {},
     create: {
       email: 'alice@prisma.io',
       username: 'alice',
+      passwordHash: passwordHash,
       todos: {
         create: {
           title: 'Check out Prisma with Next.js',
@@ -23,6 +27,7 @@ async function main() {
     create: {
       email: 'bob@prisma.io',
       username: 'bob',
+      passwordHash: passwordHash,
       todos: {
         create: [
           {
