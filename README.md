@@ -26,6 +26,11 @@ Open up Prisma Studio to view the data
 npx prisma studio
 ```
 
+Seed database
+```sh
+npx prisma db seed
+```
+
 Start the Remix development asset server and the Express server by running:
 
 ```sh
