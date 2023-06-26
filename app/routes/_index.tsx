@@ -34,12 +34,19 @@ export async function action({ request }) {
       break;
     case "POST":
       const newTodo = {
-        id: todos.length + 1,
         title: form.get("title"),
         status: form.get("status"),
       };
     
-      todos.push(newTodo);
+      // Add todo to db
+      await db.todo.create({
+        data: {
+          title: newTodo.title,
+          status: newTodo.status,
+          userId: 1
+        },
+      });
+      
       break;
   }
 
@@ -47,9 +54,13 @@ export async function action({ request }) {
 }
 
 const handleDelete = async (id) => {
-  console.log("Delete: ", id);
-  todos = todos.filter((todo) => todo.id != id);
-  console.log("Todos: ", todos);
+  // Delete todo from db 
+  await db.todo.delete({
+    where: {
+      id: Number(id),
+    },
+  });
+
 }
 
 export default function Index() {
