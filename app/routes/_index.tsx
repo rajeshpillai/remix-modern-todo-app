@@ -16,10 +16,16 @@ export const meta: V2_MetaFunction = () => {
 
 
 export async function loader() {
-  const todos = await db.todo.findMany();
-  console.log("todos(loader): ", todos);
+  const categories = await db.category.findMany();
+  const todos = await db.todo.findMany({
+    include: {
+      category: true
+    }
+  });
+
   await db.$disconnect();
-  return todos;
+  
+  return {todos, categories};
 }
 
 
@@ -67,7 +73,7 @@ const handleDelete = async (id) => {
 }
 
 export default function Index() {
-  const todos = useLoaderData();
+  const {todos, categories} = useLoaderData();
   const navigation = useNavigation();
   const busy = navigation.state === "submitting";
   const fetcher = useFetcher();
@@ -87,6 +93,13 @@ export default function Index() {
         <div>
           <input name="title" placeholder="Todo title" size={30} />
         </div>
+        <select name = "categoryId">
+         {categories.map((category) => (
+              <option key={category.id} value={category.title}>
+                {category.title}
+              </option>
+            ))}
+        </select>
         <div>
           <select name="status">
             {todo_status.map((status) => (
@@ -106,6 +119,7 @@ export default function Index() {
         <div key={todo.id} style={{ border: "1px solid grey", padding: 6, margin: 8 }}>
           <div>{todo.title}</div>
           <div>{todo.status}</div>
+          <div>{todo.category.title}</div>
           <fetcher.Form method="delete">
             <input type="hidden" name="id" value={todo.id} />
             <button type="submit">

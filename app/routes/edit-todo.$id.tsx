@@ -14,11 +14,15 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export async function loader({ params }) {
+  const categories = await db.category.findMany();
   const todo_id = params?.id;
   console.log("Editing todo  with id = " + todo_id, new Date());
   
   // find todo based on params?.id 
   const todo = await db.todo.findUnique({
+    include: {
+      category: true
+    },
     where: {
       id: Number(todo_id),
     },
@@ -30,7 +34,8 @@ export async function loader({ params }) {
       'Pragma': 'no-cache',
       'Expires': '0',
     },
-    todo
+    todo,
+    categories
   }
 }
 
@@ -61,7 +66,7 @@ export async function action({ request }) {
 }  
 
 export default function EditTodo() {
-  const {todo} = useLoaderData();
+  const {todo, categories} = useLoaderData();
   console.log(todo);
 
   const navigation = useNavigation();
@@ -92,6 +97,13 @@ export default function EditTodo() {
             ))}
           </select>
         </div>
+        <select name = "categoryId" defaultValue={todo.categoryId}>
+         {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.title}
+              </option>
+            ))}
+        </select>
 
         <button type="submit" disabled={busy}>
           {busy ? "Editing..." : "Submit"}
