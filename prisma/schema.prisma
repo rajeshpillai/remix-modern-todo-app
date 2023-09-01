@@ -60,7 +60,7 @@ model Subtask {
   title       String
   status      String @default("in-progress")
   todoId      Int
-  todo        Todo   @relation(fields: [todoId], references: [id])
+  todo        Todo   @relation(fields: [todoId], references: [id], onDelete: Cascade)
 }
 
 model Category {
