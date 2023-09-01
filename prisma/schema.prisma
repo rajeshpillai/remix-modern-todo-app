@@ -44,7 +44,7 @@ model Todo {
 
   // We set a `user` variable
   // With a `User` type (many-to-one relationship)
-  // Because each bookmark is associated with a user
+  
   // 
   // We link the `User` to a `Todo` based on:
   // - the `userId` in the `Todo` model
@@ -52,6 +52,15 @@ model Todo {
   user User @relation(fields: [userId], references: [id])
   categoryId Int? 
   category Category? @relation(fields: [categoryId], references: [id])
+  subtasks Subtask[]
+}
+
+model Subtask {
+  id          String @id @default(uuid())
+  title       String
+  status      String @default("in-progress")
+  todoId      Int
+  todo        Todo   @relation(fields: [todoId], references: [id])
 }
 
 model Category {
