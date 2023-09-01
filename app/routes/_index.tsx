@@ -128,7 +128,7 @@ export default function Index() {
         {todos.map((todo) => (
           <div className="card" key={todo.id} style={{ border: "1px solid grey", padding: 6, margin: 8 }}>
             <div className="card-body">
-              <div>{todo.title}</div>
+              <h2>{todo.title}</h2>
               <div>{todo.status}</div>
               <div>{todo.category.title}</div>
             </div>
