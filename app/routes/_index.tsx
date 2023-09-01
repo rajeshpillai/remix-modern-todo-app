@@ -143,7 +143,7 @@ export default function Index() {
             </div>
             <div className="prose px-4">
               <div className="divider"/>
-              <h3>Sub tasks:</h3>
+              <h3>Sub tasks:</h3> <Link to={`/todo/${todo.id}/add`} className="flex">Add subtask</Link>
               { todo.subtasks.length > 0 ? <SubTask data ={todo.subtasks} /> : "No subtasks added!"}
             </div>
           </div>
