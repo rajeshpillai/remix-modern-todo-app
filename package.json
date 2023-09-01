@@ -18,9 +18,9 @@
   "dependencies": {
     "@mcansh/remix-fastify": "^2.7.4",
     "@prisma/client": "^4.15.0",
-    "@remix-run/css-bundle": "^1.17.0",
-    "@remix-run/node": "^1.17.0",
-    "@remix-run/react": "^1.17.0",
+    "@remix-run/css-bundle": "^1.19.3",
+    "@remix-run/node": "^1.19.3",
+    "@remix-run/react": "^1.19.3",
     "fastify": "^4.17.0",
     "isbot": "^3.6.8",
     "morgan": "^1.10.0",
@@ -28,8 +28,8 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "^1.17.0",
-    "@remix-run/eslint-config": "^1.17.0",
+    "@remix-run/dev": "^1.19.3",
+    "@remix-run/eslint-config": "^1.19.3",
     "@types/morgan": "^1.9.4",
     "@types/react": "^18.0.35",
     "@types/react-dom": "^18.0.11",

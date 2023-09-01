@@ -36,10 +36,15 @@ export async function loader({ params }) {
 
 export async function action({ request }) {
   // Get the todo title from the request (form submission)
-  const body = new URLSearchParams(await request.text());
-  const title = body.get("title");
-  const status = body.get("status");
-  const todo_id = body.get("todo_id");
+  // const body = new URLSearchParams(await request.text());
+  // const title = body.get("title");
+  // const status = body.get("status");
+  // const todo_id = body.get("todo_id");
+
+  const form = await request.formData();
+  const title = form.get("title");
+  const status = form.get("status");
+  const todo_id = form.get("todo_id");
   
   // Update the todo using prisma db object 
   const updatedTodo = await db.todo.update({
