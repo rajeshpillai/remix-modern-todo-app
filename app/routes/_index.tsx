@@ -87,7 +87,7 @@ export default function Index() {
       style={{
         fontFamily: "system-ui, sans-serif",
         lineHeight: "1.4",
-        width: 600,
+        width: 800,
         margin: "auto",
       }}
     >
@@ -96,7 +96,7 @@ export default function Index() {
         <h4>The best remix demo app in the world!</h4>
         <Form method="post">
           <div className="form-control w-full">
-            <input name="title" placeholder="Todo title" size={30} className="input input-bordered w-full" />
+            <input name="title" placeholder="Todo title" size={30} className="input input-primary input-bordered w-full" />
           </div>
 
           <div className="form-control w-full">  
