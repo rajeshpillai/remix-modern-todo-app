@@ -91,50 +91,63 @@ export default function Index() {
         margin: "auto",
       }}
     >
-      <h2>Todo App</h2>
-      <h4>The best remix demo app in the world!</h4>
-      <Form method="post">
-        <div>
-          <input name="title" placeholder="Todo title" size={30} />
-        </div>
-        <select name = "categoryId">
-         {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.title}
-              </option>
-            ))}
-        </select>
-        <div>
-          <select name="status">
-            {todo_status.map((status) => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div className="prose">
+        <h1>Todo App</h1>
+        <h4>The best remix demo app in the world!</h4>
+        <Form method="post">
+          <div className="form-control w-full">
+            <input name="title" placeholder="Todo title" size={30} className="input input-bordered w-full" />
+          </div>
 
-        <button type="submit" disabled={busy} className="btn">
-          {busy ? "Creating..." : "Create New Todo"}
-        </button>
-      </Form>
+          <div className="form-control w-full">  
+            <select name = "categoryId" className="select select-bordered">
+            {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.title}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <div className="form-control w-full">  
+            <select name="status" className="select select-bordered">
+              {todo_status.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      {todos.map((todo) => (
-        <div key={todo.id} style={{ border: "1px solid grey", padding: 6, margin: 8 }}>
-          <div>{todo.title}</div>
-          <div>{todo.status}</div>
-          <div>{todo.category.title}</div>
-          <fetcher.Form method="delete">
-            <input type="hidden" name="id" value={todo.id} />
-            <button type="submit" className="btn">
-              Delete
-            </button> | 
-            <Link prefetch="intent" to={`/edit-todo/${todo.id}`}>Edit</Link>
-          </fetcher.Form>
-          <h2>Sub tasks:</h2>
-          { todo.subtasks.length > 0 ? <SubTask data ={todo.subtasks} /> : "No subtasks added!"}
+          <div className="py-4 flex justify-end">
+            <button type="submit" disabled={busy} className="btn btn-primary">
+              {busy ? "Creating..." : "Create New Todo"}
+            </button>
+          </div>
+        </Form>
+
+        {todos.map((todo) => (
+          <div className="card" key={todo.id} style={{ border: "1px solid grey", padding: 6, margin: 8 }}>
+            <div className="card-body">
+              <div>{todo.title}</div>
+              <div>{todo.status}</div>
+              <div>{todo.category.title}</div>
+            </div>
+            <div className="px-4 card-actions">
+              <fetcher.Form method="delete">
+                <input type="hidden" name="id" value={todo.id} />
+                <button type="submit" className="btn">
+                  Delete
+                </button> | 
+                <Link prefetch="intent" to={`/edit-todo/${todo.id}`}>Edit</Link>
+              </fetcher.Form>
+            </div>
+            <div className="prose px-4">
+              <h3>Sub tasks:</h3>
+              { todo.subtasks.length > 0 ? <SubTask data ={todo.subtasks} /> : "No subtasks added!"}
+            </div>
+          </div>
+        ))}
         </div>
-      ))}
-    </div>
-  );
+      </div>
+    );
 }
