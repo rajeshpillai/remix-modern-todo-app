@@ -42,6 +42,7 @@ export async function action({ request }) {
       const newTodo = {
         title: form.get("title"),
         status: form.get("status"),
+        
       };
     
       // Fetch the first user from DB
@@ -52,7 +53,9 @@ export async function action({ request }) {
         data: {
           title: newTodo.title,
           status: newTodo.status,
-          userId: user?.id || 1
+          userId: user?.id || 1,
+          categoryId: Number(form.get("categoryId")),
+          
         },
       });
       
@@ -95,7 +98,7 @@ export default function Index() {
         </div>
         <select name = "categoryId">
          {categories.map((category) => (
-              <option key={category.id} value={category.title}>
+              <option key={category.id} value={category.id}>
                 {category.title}
               </option>
             ))}

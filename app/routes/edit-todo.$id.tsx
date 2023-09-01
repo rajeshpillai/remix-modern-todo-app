@@ -50,6 +50,7 @@ export async function action({ request }) {
   const title = form.get("title");
   const status = form.get("status");
   const todo_id = form.get("todo_id");
+  const categoryId = form.get("categoryId");
   
   // Update the todo using prisma db object 
   const updatedTodo = await db.todo.update({
@@ -59,6 +60,9 @@ export async function action({ request }) {
     data: {
       title: title,
       status: status,
+      category: { 
+        connect: {id: Number(categoryId)}
+      }
     },
   });
 
