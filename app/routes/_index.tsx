@@ -135,13 +135,14 @@ export default function Index() {
             <div className="px-4 card-actions">
               <fetcher.Form method="delete">
                 <input type="hidden" name="id" value={todo.id} />
-                <button type="submit" className="btn">
+                <button type="submit" className="btn btn-sm bg-red-600">
                   Delete
                 </button> | 
-                <Link prefetch="intent" to={`/edit-todo/${todo.id}`}>Edit</Link>
+                <Link className="btn btn-sm" prefetch="intent" to={`/edit-todo/${todo.id}`}>Edit</Link>
               </fetcher.Form>
             </div>
             <div className="prose px-4">
+              <div className="divider"/>
               <h3>Sub tasks:</h3>
               { todo.subtasks.length > 0 ? <SubTask data ={todo.subtasks} /> : "No subtasks added!"}
             </div>
