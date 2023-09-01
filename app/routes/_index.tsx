@@ -114,7 +114,7 @@ export default function Index() {
           </select>
         </div>
 
-        <button type="submit" disabled={busy}>
+        <button type="submit" disabled={busy} className="btn">
           {busy ? "Creating..." : "Create New Todo"}
         </button>
       </Form>
@@ -126,7 +126,7 @@ export default function Index() {
           <div>{todo.category.title}</div>
           <fetcher.Form method="delete">
             <input type="hidden" name="id" value={todo.id} />
-            <button type="submit">
+            <button type="submit" className="btn">
               Delete
             </button> | 
             <Link prefetch="intent" to={`/edit-todo/${todo.id}`}>Edit</Link>

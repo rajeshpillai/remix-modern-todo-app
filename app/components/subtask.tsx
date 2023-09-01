@@ -5,7 +5,7 @@ export default function SubTask({data}) {
     <ul>
       {data.map(st => {
         return (
-          <li>
+          <li key={st.id}>
             <div>{st.title}</div>
           </li>
         )
