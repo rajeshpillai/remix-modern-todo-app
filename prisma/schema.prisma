@@ -50,4 +50,12 @@ model Todo {
   // - the `userId` in the `Todo` model
   // - the `id` in the `User` model
   user User @relation(fields: [userId], references: [id])
+  categoryId Int? 
+  category Category? @relation(fields: [categoryId], references: [id])
+}
+
+model Category {
+  id            Int   @id @default(autoincrement())
+  title      String
+  todos         Todo[]
 }

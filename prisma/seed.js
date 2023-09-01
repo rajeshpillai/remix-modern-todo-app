@@ -2,6 +2,23 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 async function main() {
+  // reset db
+  await prisma.todo.deleteMany({});
+  await prisma.user.deleteMany({});
+  await prisma.category.deleteMany({});
+
+  const personal = await prisma.category.create({
+    data: {
+      title : "Personal"
+    }
+  });
+
+  const work = await prisma.category.create({
+    data: {
+      title : "Work"
+    }
+  });
+
   const alice = await prisma.user.upsert({
     where: { email: 'alice@prisma.io' },
     update: {},
@@ -12,6 +29,7 @@ async function main() {
         create: {
           title: 'Check out Prisma with Next.js',
           status: "inprogress",
+          categoryId: personal.id
         },
       },
     },
@@ -28,10 +46,12 @@ async function main() {
           {
             title: 'Follow Prisma on Twitter',
             status: "onhold",
+            categoryId: personal.id
           },
           {
-            title: 'Follow Nexus on Twitter',
-            status: "done",
+            title: 'Hiring',
+            status: "inprogress",
+            categoryId: work.id
           },
         ],
       },
