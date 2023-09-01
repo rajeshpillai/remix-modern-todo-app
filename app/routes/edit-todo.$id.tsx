@@ -85,34 +85,39 @@ export default function EditTodo() {
         margin: "auto",
       }}
     >
-      <h2>Edit App</h2>
-      <h4>The best remix demo app in the world!</h4>
-      <Form method="post">
-        <div>
-          <input name="title" placeholder="Todo title" size={30} defaultValue={todo.title}/>
-          <input type="hidden" name="todo_id" value={todo.id}/>
-        </div>
-        <div>
-          <select name="status" defaultValue={todo.status}>
-            {todo_status.map((status) => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
-        </div>
-        <select name = "categoryId" defaultValue={todo.categoryId}>
-         {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.title}
-              </option>
-            ))}
-        </select>
-
-        <button type="submit" disabled={busy}>
-          {busy ? "Editing..." : "Submit"}
-        </button>
-      </Form>
-    </div>
+      <div className="prose">
+        <h2>Edit App</h2>
+        <h4>The best remix demo app in the world!</h4>
+        <Form method="post">
+          <div className="py-2 form-control w-full">
+            <input className="input input-primary input-bordered w-full" name="title" placeholder="Todo title" size={30} defaultValue={todo.title}/>
+            <input className="input input-primary input-bordered w-full" type="hidden" name="todo_id" value={todo.id}/>
+          </div>
+          <div className="py-2 form-control w-full">
+            <select className="input input-primary input-bordered w-full" name="status" defaultValue={todo.status}>
+              {todo_status.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-control w-full">
+            <select className="input input-primary input-bordered w-full" name="categoryId" defaultValue={todo.categoryId}>
+            {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.title}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <div className="py-4 flex justify-end">
+            <button className="btn btn-primary" type="submit" disabled={busy}>
+              {busy ? "Editing..." : "Submit"}
+            </button>
+          </div>
+        </Form>
+      </div>
+      </div>
   );
 }
