@@ -3,6 +3,7 @@ const prisma = new PrismaClient()
 
 async function main() {
   // reset db
+  await prisma.subtask.deleteMany({});
   await prisma.todo.deleteMany({});
   await prisma.user.deleteMany({});
   await prisma.category.deleteMany({});
@@ -29,7 +30,18 @@ async function main() {
         create: {
           title: 'Check out Prisma with Next.js',
           status: "inprogress",
-          categoryId: personal.id
+          categoryId: personal.id,
+          subtasks: {
+            create: [
+              {
+                title: "Check doc",
+                status: "inprogress",
+              },
+              {
+                title: "Enroll in a course",
+                status: "pending",
+              },
+          ]}
         },
       },
     },

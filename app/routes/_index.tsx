@@ -2,7 +2,7 @@ import type { V2_MetaFunction } from "@remix-run/node";
 import { Form, Link, useLoaderData, useNavigation, useFetcher } from "@remix-run/react";
 import { Todo } from "@prisma/client";
 import { db } from "~/utils/db.server";
-
+import SubTask from "~/components/subtask";
 
 
 const todo_status = ["inprogress", "onhold", "completed"];
@@ -19,7 +19,8 @@ export async function loader() {
   const categories = await db.category.findMany();
   const todos = await db.todo.findMany({
     include: {
-      category: true
+      category: true,
+      subtasks: true,
     }
   });
 
@@ -130,7 +131,8 @@ export default function Index() {
             </button> | 
             <Link prefetch="intent" to={`/edit-todo/${todo.id}`}>Edit</Link>
           </fetcher.Form>
-          
+          <h2>Sub tasks:</h2>
+          { todo.subtasks.length > 0 ? <SubTask data ={todo.subtasks} /> : "No subtasks added!"}
         </div>
       ))}
     </div>
