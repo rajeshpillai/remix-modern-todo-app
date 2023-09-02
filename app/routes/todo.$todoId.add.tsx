@@ -1,4 +1,4 @@
-import { useParams, Form } from "@remix-run/react";
+import { useParams, Form, useSearchParams  } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
 import { db } from "~/utils/db.server";
 
@@ -25,6 +25,8 @@ export async function action({ request }) {
 
 export default function SubTaskForm() {
   let {todoId} = useParams();
+  let [searchParams, setSearchParams] = useSearchParams();
+
 
   return (
     <div style={{
@@ -33,8 +35,8 @@ export default function SubTaskForm() {
       width: 800,
       margin: "auto",
     }}>
-      <h2>Add Subtask</h2>
-      {todoId}
+      <h2>Add Subtask for: {searchParams.get("title")}</h2>
+      
       <Form method="post">
         <input type="hidden" value={todoId} name = "todoId"></input>
         <div className="py-2 form-control w-full">

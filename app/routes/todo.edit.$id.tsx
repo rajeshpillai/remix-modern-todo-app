@@ -78,7 +78,7 @@ export default function EditTodo() {
       }}
     >
       <div className="prose">
-        <h2>Edit App</h2>
+        <h2>Edit Todo</h2>
         <h4>The best remix demo app in the world!</h4>
         <Form method="post">
           <div className="py-2 form-control w-full">

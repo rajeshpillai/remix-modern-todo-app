@@ -29,8 +29,13 @@ export default function App() {
         <Links />
       </head>
       
-      <body className="">
-        <Outlet />
+      <body className="flex flex-col items-center">
+        <div className="prose">
+          <h1>Todo App</h1>
+          <h4>The best remix demo app in the world!</h4>
+          <div className="divider"></div>
+          <Outlet />
+        </div>
         <ScrollRestoration />
         <Scripts />
         {/* <LiveReload /> */}

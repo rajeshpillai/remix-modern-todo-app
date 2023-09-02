@@ -106,8 +106,7 @@ export default function Index() {
       }}
     >
       <div className="prose">
-        <h1>Todo App</h1>
-        <h4>The best remix demo app in the world!</h4>
+        
         <Form method="post">
           <div className="form-control w-full">
             <input name="title" placeholder="Todo title" size={30} className="input input-primary input-bordered w-full" />
@@ -157,7 +156,7 @@ export default function Index() {
             </div>
             <div className="prose px-4">
               <div className="divider"/>
-              <h3>Sub tasks:</h3> <Link to={`/todo/${todo.id}/add`} className="flex">Add subtask</Link>
+              <h3>Sub tasks:</h3> <Link to={`/todo/${todo.id}/add?title=${todo.title}`} className="flex">Add subtask</Link>
               { todo.subtasks.length > 0 ? <SubTask data ={todo.subtasks} /> : "No subtasks added!"}
             </div>
           </div>
