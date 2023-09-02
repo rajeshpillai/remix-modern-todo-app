@@ -54,7 +54,7 @@ model Todo {
   categoryId Int?
   category   Category?    @relation(fields: [categoryId], references: [id])
   subtasks   Subtask[]
-  UserRating UserRating[]
+  userrating UserRating[]
 }
 
 model Subtask {
@@ -72,6 +72,8 @@ model UserRating {
   userId Int
   todo   Todo   @relation(fields: [todoId], references: [id])
   user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId, todoId])
 }
 
 model Category {

@@ -1,5 +1,7 @@
 import type { V2_MetaFunction } from "@remix-run/node";
-import { Form, Link, useLoaderData, useNavigation, useFetcher } from "@remix-run/react";
+import { Form, Link, useLoaderData, useNavigation, useFetcher, useSubmit } from "@remix-run/react";
+import { useRef } from "react";
+
 import { db } from "~/utils/db.server";
 import SubTask from "~/components/features/subtask";
 import StarRating from "~/components/ui/star-rating";
@@ -20,6 +22,7 @@ export async function loader() {
     include: {
       category: true,
       subtasks: true,
+      userrating: true,
     }
   });
 
@@ -32,10 +35,17 @@ export async function loader() {
 export async function action({ request }) {
   const form = await request.formData();
   const action = form.get("delete");
+  const rating = form.get("rating");
 
-  console.log("POST DATA: ",request.method,  action);
+  console.log("POST DATA: ",request.method,  action, rating);
   
   switch(request.method) {
+    case "PUT": // star rating
+      if (rating) {
+        await rateTodo(form.get("todoId"), form.get("userId"), rating);
+        return true;
+      }
+      break;
     case "DELETE":
       if (action == "subtask")  {
         await handleDeleteSubTask(form.get("subtaskId"));
@@ -45,6 +55,8 @@ export async function action({ request }) {
       break;
       
     case "POST":
+      
+
       const newTodo = {
         title: form.get("title"),
         status: form.get("status"),
@@ -70,6 +82,26 @@ export async function action({ request }) {
   return true;
 }
 
+const rateTodo = async(todoId, userId, rating)  => {
+  console.log(`Rating ${todoId} with value ${rating} for user ${userId}`);
+  await db.userRating.upsert({
+    where: { 
+      userId_todoId: {
+        todoId: Number(todoId), 
+        userId: Number(userId) 
+      }
+    },
+    create: {
+      rating: Number(rating),
+      userId: Number(userId) || 1,
+      todoId: Number(todoId),
+    },
+    update: {
+      rating: Number(rating),
+    },
+  });
+}
+
 const handleDeleteSubTask = async (id) => {
   // Delete todo from db 
   await db.subtask.delete({
@@ -92,12 +124,26 @@ const handleDelete = async (id) => {
 
 export default function Index() {
   const {todos, categories} = useLoaderData();
+  const submitRating = useSubmit();
   const navigation = useNavigation();
   const busy = navigation.state === "submitting";
   const fetcher = useFetcher();
 
+  const todoIdRef = useRef();
+  const userIdRef = useRef();
+
   const handleChange = (value) => {
     alert(value);
+    submitRating({
+        rating: value,
+        todoId: todoIdRef.current.value,
+        userId: userIdRef.current.value,
+      }, 
+      {
+        replace: true,
+        method: "put",
+        action: ".",
+      });
   }
   
 
@@ -147,17 +193,21 @@ export default function Index() {
           <div className="card" key={todo.id} style={{ border: "1px solid grey", padding: 6, margin: 8 }}>
             <div className="card-body">
               <h2>{todo.title}</h2>
-              <StarRating 
-                count={5}
-                size={40}
-                value={4}
-                activeColor ={'red'}
-                inactiveColor={'#ddd'}
-                onChange={handleChange}
-              />
+              <Form method="post" action="/">
+                <input ref={todoIdRef} type="hidden" name="todoId" value={todo.id}/>
+                <input ref={userIdRef} type="hidden" name="userId" value={todo.userId}/>
+                <input type="hidden" name="rating" value="rating"/>
+                <StarRating 
+                  count={5}
+                  size={40}
+                  value={4}
+                  activeColor ={'red'}
+                  inactiveColor={'#ddd'}
+                  onChange={handleChange}
+                />
+              </Form>
               <div>{todo.status}</div>
               <div>{todo.category.title}</div>
-              
             </div>
             <div className="px-8 card-actions">
               <fetcher.Form method="delete" onSubmit={e => !confirm("Are you sure?") ? e.preventDefault(): true}>
