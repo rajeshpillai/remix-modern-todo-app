@@ -132,7 +132,7 @@ export default function Index() {
               <div>{todo.category.title}</div>
             </div>
             <div className="px-4 card-actions">
-              <fetcher.Form method="delete">
+              <fetcher.Form method="delete" onSubmit={e => !confirm("Are you sure?") ? e.preventDefault(): true}>
                 <input type="hidden" name="id" value={todo.id} />
                 <button type="submit" className="btn btn-sm bg-red-600">
                   Delete
