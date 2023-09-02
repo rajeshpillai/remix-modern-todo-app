@@ -3,7 +3,7 @@ const prisma = new PrismaClient()
 
 async function main() {
   // reset db
-  await prisma.userrating.deleteMany({});
+  await prisma.userRating.deleteMany({});
   await prisma.subtask.deleteMany({});
   await prisma.todo.deleteMany({});
   await prisma.user.deleteMany({});

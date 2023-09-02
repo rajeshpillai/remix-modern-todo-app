@@ -26,6 +26,7 @@ export async function loader() {
     }
   });
 
+
   await db.$disconnect();
   
   return {todos, categories};
@@ -55,8 +56,6 @@ export async function action({ request }) {
       break;
       
     case "POST":
-      
-
       const newTodo = {
         title: form.get("title"),
         status: form.get("status"),
@@ -70,7 +69,7 @@ export async function action({ request }) {
         data: {
           title: newTodo.title,
           status: newTodo.status,
-          userId: user?.id || 1,
+          userId: user?.id,
           categoryId: Number(form.get("categoryId")),
           
         },
@@ -83,7 +82,7 @@ export async function action({ request }) {
 }
 
 const rateTodo = async(todoId, userId, rating)  => {
-  console.log(`Rating ${todoId} with value ${rating} for user ${userId}`);
+  console.log(`Rating todoID ${todoId} with value ${rating} for user ${userId}`);
   await db.userRating.upsert({
     where: { 
       userId_todoId: {
@@ -129,15 +128,13 @@ export default function Index() {
   const busy = navigation.state === "submitting";
   const fetcher = useFetcher();
 
-  const todoIdRef = useRef();
-  const userIdRef = useRef();
 
-  const handleChange = (value) => {
-    alert(value);
+  const handleRatingChange = (todoId, userId, value) => {
+    alert(`Rating for Todo ${todoId} for user ${userId} is ${value}`);
     submitRating({
         rating: value,
-        todoId: todoIdRef.current.value,
-        userId: userIdRef.current.value,
+        todoId: todoId,
+        userId: userId,
       }, 
       {
         replace: true,
@@ -194,16 +191,16 @@ export default function Index() {
             <div className="card-body">
               <h2>{todo.title}</h2>
               <Form method="post" action="/">
-                <input ref={todoIdRef} type="hidden" name="todoId" value={todo.id}/>
-                <input ref={userIdRef} type="hidden" name="userId" value={todo.userId}/>
+                <input type="hidden" name="todoId" value={todo.id}/>
+                <input type="hidden" name="userId" value={todo.userId}/>
                 <input type="hidden" name="rating" value="rating"/>
                 <StarRating 
                   count={5}
                   size={40}
-                  value={4}
+                  value={todo.userrating[0] ? todo.userrating[0].rating : null}
                   activeColor ={'red'}
                   inactiveColor={'#ddd'}
-                  onChange={handleChange}
+                  onChange={handleRatingChange.bind(null, todo.id, todo.userId)}
                 />
               </Form>
               <div>{todo.status}</div>

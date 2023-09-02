@@ -67,7 +67,7 @@ model Subtask {
 
 model UserRating {
   id     String @id @default(uuid())
-  rating Int
+  rating Float
   todoId Int
   userId Int
   todo   Todo   @relation(fields: [todoId], references: [id])
