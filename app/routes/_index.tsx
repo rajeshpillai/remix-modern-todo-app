@@ -1,6 +1,5 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 import { Form, Link, useLoaderData, useNavigation, useFetcher } from "@remix-run/react";
-import { Todo } from "@prisma/client";
 import { db } from "~/utils/db.server";
 import SubTask from "~/components/subtask";
 
@@ -138,7 +137,7 @@ export default function Index() {
                 <button type="submit" className="btn btn-sm bg-red-600">
                   Delete
                 </button> | 
-                <Link className="btn btn-sm" prefetch="intent" to={`/edit-todo/${todo.id}`}>Edit</Link>
+                <Link className="btn btn-sm" prefetch="intent" to={`/todo/edit/${todo.id}`}>Edit</Link>
               </fetcher.Form>
             </div>
             <div className="prose px-4">

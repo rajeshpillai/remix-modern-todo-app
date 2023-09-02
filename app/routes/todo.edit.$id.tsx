@@ -1,8 +1,6 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import { V2_MetaFunction, redirect } from "@remix-run/node";
 import { Form, Link, useParams, useLoaderData, useNavigation } from "@remix-run/react";
 import { db } from "~/utils/db.server";
-
-
 
 const todo_status = ["inprogress", "onhold", "completed"];
 
@@ -40,12 +38,6 @@ export async function loader({ params }) {
 }
 
 export async function action({ request }) {
-  // Get the todo title from the request (form submission)
-  // const body = new URLSearchParams(await request.text());
-  // const title = body.get("title");
-  // const status = body.get("status");
-  // const todo_id = body.get("todo_id");
-
   const form = await request.formData();
   const title = form.get("title");
   const status = form.get("status");
@@ -66,7 +58,7 @@ export async function action({ request }) {
     },
   });
 
-  return null;
+  return redirect("/");
 }  
 
 export default function EditTodo() {
@@ -118,6 +110,6 @@ export default function EditTodo() {
           </div>
         </Form>
       </div>
-      </div>
+    </div>
   );
 }
