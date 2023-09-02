@@ -31,7 +31,7 @@ export default function TodosList() {
   return (
     <div className="container mx-auto py-4 text-blue-900">
       <table className="min-w-full bg-white divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+        <thead className="bg-blue-100 text-gray-700">
           <tr>
             <th className="w-1/12 py-2 px-4 text-center text-gray-500">Toggle</th>
             <th className="w-3/12 py-2 px-4 text-center text-gray-500">Title</th>
