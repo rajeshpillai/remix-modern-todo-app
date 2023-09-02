@@ -1,5 +1,5 @@
 // routes/TodosList.tsx
-import { useState } from "react";
+import React, { useState } from "react";
 
 import type { V2_MetaFunction } from "@remix-run/node";
 import { Form, Link, useLoaderData, useNavigation, useFetcher, useSubmit } from "@remix-run/react";
@@ -49,7 +49,7 @@ export default function TodosList() {
             };
 
             return (
-              <>
+              <React.Fragment key={todo.id}>
                 <tr className="text-center" key={todo.id}>
                   <td className="py-2">
                     <button className="bg-red-500 text-white w-6 h-6 rounded-full" onClick={toggleOpen}>
@@ -89,7 +89,7 @@ export default function TodosList() {
                     </td>
                   </tr>
                 )}
-              </>
+              </React.Fragment>
             );
           })}
         </tbody>
