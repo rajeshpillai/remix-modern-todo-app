@@ -31,18 +31,23 @@ export async function loader() {
 
 export async function action({ request }) {
   const form = await request.formData();
+  const action = form.get("delete");
 
-  console.log("POST DATA: ",request.method,  form.get("title"));
+  console.log("POST DATA: ",request.method,  action);
   
   switch(request.method) {
     case "DELETE":
-      await handleDelete(form.get("id"));
+      if (action == "subtask")  {
+        await handleDeleteSubTask(form.get("subtaskId"));
+      } else if (action == "task") {
+        await handleDelete(form.get("id"));
+      }
       break;
+      
     case "POST":
       const newTodo = {
         title: form.get("title"),
         status: form.get("status"),
-        
       };
     
       // Fetch the first user from DB
@@ -63,6 +68,16 @@ export async function action({ request }) {
   }
 
   return true;
+}
+
+const handleDeleteSubTask = async (id) => {
+  // Delete todo from db 
+  await db.subtask.delete({
+    where: {
+      id: id,
+    },
+  });
+
 }
 
 const handleDelete = async (id) => {
@@ -134,7 +149,7 @@ export default function Index() {
             <div className="px-4 card-actions">
               <fetcher.Form method="delete" onSubmit={e => !confirm("Are you sure?") ? e.preventDefault(): true}>
                 <input type="hidden" name="id" value={todo.id} />
-                <button type="submit" className="btn btn-sm bg-red-600">
+                <button name="delete" value="task" type="submit" className="btn btn-sm bg-red-600">
                   Delete
                 </button> | 
                 <Link className="btn btn-sm" prefetch="intent" to={`/todo/edit/${todo.id}`}>Edit</Link>
