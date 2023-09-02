@@ -1,8 +1,8 @@
 import type { V2_MetaFunction } from "@remix-run/node";
 import { Form, Link, useLoaderData, useNavigation, useFetcher } from "@remix-run/react";
 import { db } from "~/utils/db.server";
-import SubTask from "~/components/subtask";
-
+import SubTask from "~/components/features/subtask";
+import StarRating from "~/components/ui/star-rating";
 
 const todo_status = ["inprogress", "onhold", "completed"];
 
@@ -96,6 +96,11 @@ export default function Index() {
   const busy = navigation.state === "submitting";
   const fetcher = useFetcher();
 
+  const handleChange = (value) => {
+    alert(value);
+  }
+  
+
   return (
     <div
       style={{
@@ -142,10 +147,19 @@ export default function Index() {
           <div className="card" key={todo.id} style={{ border: "1px solid grey", padding: 6, margin: 8 }}>
             <div className="card-body">
               <h2>{todo.title}</h2>
+              <StarRating 
+                count={5}
+                size={40}
+                value={4}
+                activeColor ={'red'}
+                inactiveColor={'#ddd'}
+                onChange={handleChange}
+              />
               <div>{todo.status}</div>
               <div>{todo.category.title}</div>
+              
             </div>
-            <div className="px-4 card-actions">
+            <div className="px-8 card-actions">
               <fetcher.Form method="delete" onSubmit={e => !confirm("Are you sure?") ? e.preventDefault(): true}>
                 <input type="hidden" name="id" value={todo.id} />
                 <button name="delete" value="task" type="submit" className="btn btn-sm bg-red-600">
@@ -154,7 +168,7 @@ export default function Index() {
                 <Link className="btn btn-sm" prefetch="intent" to={`/todo/edit/${todo.id}`}>Edit</Link>
               </fetcher.Form>
             </div>
-            <div className="prose px-4">
+            <div className="prose px-8">
               <div className="divider"/>
               <h3>Sub tasks:</h3> <Link to={`/todo/${todo.id}/add?title=${todo.title}`} className="flex">Add subtask</Link>
               { todo.subtasks.length > 0 ? <SubTask data ={todo.subtasks} /> : "No subtasks added!"}

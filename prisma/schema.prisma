@@ -26,7 +26,8 @@ model User {
 
   // With a `Todo[]` type (one-to-many relationship)
   // Because each user can have between 0 and an infinite number of todos
-  todos Todo[]
+  todos      Todo[]
+  UserRating UserRating[]
 }
 
 model Todo {
@@ -44,27 +45,37 @@ model Todo {
 
   // We set a `user` variable
   // With a `User` type (many-to-one relationship)
-  
+
   // 
   // We link the `User` to a `Todo` based on:
   // - the `userId` in the `Todo` model
   // - the `id` in the `User` model
-  user User @relation(fields: [userId], references: [id])
-  categoryId Int? 
-  category Category? @relation(fields: [categoryId], references: [id])
-  subtasks Subtask[]
+  user       User         @relation(fields: [userId], references: [id])
+  categoryId Int?
+  category   Category?    @relation(fields: [categoryId], references: [id])
+  subtasks   Subtask[]
+  UserRating UserRating[]
 }
 
 model Subtask {
-  id          String @id @default(uuid())
-  title       String
-  status      String @default("in-progress")
-  todoId      Int
-  todo        Todo   @relation(fields: [todoId], references: [id], onDelete: Cascade)
+  id     String @id @default(uuid())
+  title  String
+  status String @default("in-progress")
+  todoId Int
+  todo   Todo   @relation(fields: [todoId], references: [id], onDelete: Cascade)
+}
+
+model UserRating {
+  id     String @id @default(uuid())
+  rating Int
+  todoId Int
+  userId Int
+  todo   Todo   @relation(fields: [todoId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 model Category {
-  id            Int   @id @default(autoincrement())
-  title      String
-  todos         Todo[]
+  id    Int    @id @default(autoincrement())
+  title String
+  todos Todo[]
 }
