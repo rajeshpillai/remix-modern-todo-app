@@ -31,12 +31,13 @@ export default function App() {
       </head>
       
       <body className="flex flex-col items-center">
-        <div className="prose">
-          <h1>Todo App</h1>
-          <h4>The best remix demo app in the world!</h4>
-          <div className="divider"></div>
+        <div className="container mx-auto py-8 text-center prose">
+          <h1 className="text-4xl font-bold text-blue-600">Todo App</h1>
+          <h6 className="text-xl text-red-300 mt-2">The best remix demo app in the world!</h6>
+          <div className="divider h-px bg-gray-300 my-4"></div>
           <Outlet />
         </div>
+
         <ScrollRestoration />
         <Scripts />
         {/* <LiveReload /> */}

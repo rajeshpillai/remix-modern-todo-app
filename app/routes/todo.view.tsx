@@ -29,7 +29,8 @@ export default function TodosList() {
   const todos = useLoaderData();
 
   return (
-    <div className="container mx-auto py-4 text-blue-900">
+    <div className="container mx-auto py-4 text-blue-900 prose">
+      <h2>ALL TODOS</h2>
       <table className="min-w-full bg-white divide-y divide-gray-200">
         <thead className="bg-blue-100 text-gray-700">
           <tr>
