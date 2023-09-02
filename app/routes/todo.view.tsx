@@ -50,7 +50,7 @@ export default function TodosList() {
 
             return (
               <>
-                <tr className="text-center">
+                <tr className="text-center" key={todo.id}>
                   <td className="py-2">
                     <button className="bg-red-500 text-white w-6 h-6 rounded-full" onClick={toggleOpen}>
                       {isOpen ? "-" : "+"}

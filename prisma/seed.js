@@ -70,7 +70,31 @@ async function main() {
       },
     },
   })
-  console.log({ alice, bob })
+
+  // Add more data
+  // Seed the database with 20 Todos with userId hardcoded as 1
+  for (let i = 1; i <= 20; i++) {
+    const todo = await prisma.todo.create({
+      data: {
+        title: `Todo Item ${i}`,
+        status: "pending",
+        userId: alice.id, // hardcoded userId
+        categoryId: personal.id,
+        // ... you can add other fields as well
+      },
+    });
+
+    // Add a couple of sub-todos for each Todo
+    for (let j = 1; j <= 2; j++) {
+      await prisma.subtask.create({
+        data: {
+          title: `Subtask ${j} for Todo ${i}`,
+          status: "in-progress",
+          todoId: todo.id,
+        },
+      });
+    }
+  }
 }
 main()
   .then(async () => {
