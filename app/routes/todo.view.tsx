@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 import type { V2_MetaFunction } from "@remix-run/node";
-import { Form, Link, useLoaderData, useNavigation, useFetcher, useSubmit } from "@remix-run/react";
+import { Form, Link, useLoaderData,useSearchParams, isRouteErrorResponse, useRouteError} from "@remix-run/react";
 import { useRef } from "react";
 
 import { db } from "~/utils/db.server";
@@ -25,35 +25,11 @@ export let loader = async () => {
   return todos;
 };
 
-export function ErrorBoundary() {
-  const error = useRouteError();
 
-  if (isRouteErrorResponse(error)) {
-    return (
-      <div>
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
-      </div>
-    );
-  } else if (error instanceof Error) {
-    return (
-      <div>
-        <h1>Error</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
-    );
-  } else {
-    return <h1>Unknown Error</h1>;
-  }
-}
 
 export default function TodosList() {
   const todos = useLoaderData();
-
+  const encodedRedirectTo = encodeURIComponent("todo/view");
   return (
     <div className="container mx-auto py-4 text-blue-900 prose">
       <h2>ALL TODOS</h2>
@@ -90,6 +66,7 @@ export default function TodosList() {
                   <tr>
                     <td></td>
                     <td colSpan={4}>
+                      <Link to={`/todo/${todo.id}/add?title=${todo.title}&redirect_to=${encodedRedirectTo}`} className="flex">+ subtask</Link>
                       {todo.subtasks.length > 0 ? (
                         <table className="min-w-full  divide-y divide-gray-200 bg-gray-100">
                           <thead className="bg-blue-100 text-gray-700">
@@ -120,4 +97,30 @@ export default function TodosList() {
       </table>
     </div>
   );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <h1>
+          {error.status} {error.statusText}
+        </h1>
+        <p>{error.data}</p>
+      </div>
+    );
+  } else if (error instanceof Error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{error.message}</p>
+        <p>The stack trace is:</p>
+        <pre>{error.stack}</pre>
+      </div>
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
 }

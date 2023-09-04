@@ -1,10 +1,16 @@
+import React, {useRef} from "react";
 import { useParams, Form, useSearchParams  } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
 import { db } from "~/utils/db.server";
 
 const todo_status = ["inprogress", "onhold", "completed"];
 
+
+
 export async function action({ request }) {
+
+  const url = new URL(request.url)
+  const redirectTo = url.searchParams.get('redirect_to')
 
   const form = await request.formData();
   const title = form.get("title");
@@ -20,13 +26,16 @@ export async function action({ request }) {
     },
   });
 
+  console.log("REDIRECT TO: ", redirectTo);
+  if (redirectTo) {
+    return redirect("/" + redirectTo);
+  }
   return redirect("/");
 }  
 
 export default function SubTaskForm() {
+  const [searchParams, _] = useSearchParams();
   let {todoId} = useParams();
-  let [searchParams, setSearchParams] = useSearchParams();
-
 
   return (
     <div style={{
