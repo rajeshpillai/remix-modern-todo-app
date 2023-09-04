@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 
 import type { V2_MetaFunction } from "@remix-run/node";
-import { Form, Link, useLoaderData,useSearchParams, isRouteErrorResponse, useRouteError} from "@remix-run/react";
 import { useRef } from "react";
+import { Link, useLoaderData,useFetcher, isRouteErrorResponse, useRouteError} from "@remix-run/react";
+import { redirect } from "@remix-run/node";
 
 import { db } from "~/utils/db.server";
 import SubTask from "~/components/features/subtask";
@@ -25,10 +26,27 @@ export let loader = async () => {
   return todos;
 };
 
+export async function action({ request }) {
 
+  const form = await request.formData();
+  const title = form.get("title");
+  const status = form.get("status");
+  const todoId = form.get("todoId");
+  
+  // Update the todo using prisma db object 
+  await db.subtask.create({
+    data: {
+      title: title,
+      status: status,
+      todoId: Number(todoId)
+    },
+  });
+  return redirect(".");
+}  
 
 export default function TodosList() {
   const todos = useLoaderData();
+  const fetcher = useFetcher();
   const encodedRedirectTo = encodeURIComponent("todo/view");
   return (
     <div className="container mx-auto py-4 text-blue-900 prose">
@@ -67,6 +85,14 @@ export default function TodosList() {
                     <td></td>
                     <td colSpan={4}>
                       <Link to={`/todo/${todo.id}/add?title=${todo.title}&redirect_to=${encodedRedirectTo}`} className="flex">+ subtask</Link>
+                      <div>
+                        <fetcher.Form method="POST">
+                          <input type="hidden" name="todoId" value={todo.id}/>
+                          <input type="hidden" name="status" value="in-progress" />
+                          <input type="text" name="title" placeholder ="sub todo?"></input>
+                        </fetcher.Form> 
+                      </div>
+                      
                       {todo.subtasks.length > 0 ? (
                         <table className="min-w-full  divide-y divide-gray-200 bg-gray-100">
                           <thead className="bg-blue-100 text-gray-700">

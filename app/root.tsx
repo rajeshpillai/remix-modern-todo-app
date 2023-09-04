@@ -43,7 +43,10 @@ export default function App() {
           <Outlet />
         </div>
 
-        <ScrollRestoration />
+        <ScrollRestoration 
+          getKey = {location => {
+              return location.pathname;  // default location.key (unique)  (pathname -> save scroll position by URL) />
+          }} />
         <Scripts />
         {/* <LiveReload /> */}
       </body>
