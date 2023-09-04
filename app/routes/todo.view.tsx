@@ -25,6 +25,32 @@ export let loader = async () => {
   return todos;
 };
 
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <h1>
+          {error.status} {error.statusText}
+        </h1>
+        <p>{error.data}</p>
+      </div>
+    );
+  } else if (error instanceof Error) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{error.message}</p>
+        <p>The stack trace is:</p>
+        <pre>{error.stack}</pre>
+      </div>
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
+}
+
 export default function TodosList() {
   const todos = useLoaderData();
 
@@ -37,7 +63,6 @@ export default function TodosList() {
             <th className="w-1/12 py-2 px-4 text-center text-gray-500">Toggle</th>
             <th className="w-3/12 py-2 px-4 text-center text-gray-500">Title</th>
             <th className="w-3/12 py-2 px-4 text-center text-gray-500">Status</th>
-            <th className="w-3/12 py-2 px-4 text-center text-gray-500">Created At</th>
             <th className="w-2/12 py-2 px-4 text-center text-gray-500">Category</th>
           </tr>
         </thead>
@@ -58,7 +83,6 @@ export default function TodosList() {
                   </td>
                   <td className="py-2">{todo.title}</td>
                   <td className="py-2">{todo.status}</td>
-                  <td className="py-2">{new Date(todo.createdAt).toLocaleDateString()}</td>
                   <td className="py-2">{todo.category ? todo.category.title : "N/A"}</td>
                 </tr>
 
