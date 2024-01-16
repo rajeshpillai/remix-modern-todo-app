@@ -198,7 +198,7 @@ export default function Index() {
                   count={5}
                   size={40}
                   value={todo.userrating[0] ? todo.userrating[0].rating : null}
-                  activeColor ={'red'}
+                  activeColor ={'green'}
                   inactiveColor={'#ddd'}
                   onChange={handleRatingChange.bind(null, todo.id, todo.userId)}
                 />

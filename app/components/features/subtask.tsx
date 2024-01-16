@@ -1,16 +1,16 @@
 import { Form, Link, useLoaderData, useParams, useFetcher } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 
-export async function action({ request }) {
-  const form = await request.formData();
+// export async function action({ request }) {
+//   const form = await request.formData();
     
-  switch(request.method) {
-    case "DELETE":
-      await handleDelete(form.get("subtaskId"));
-      break;
-  }
-  return true;
-}
+//   switch(request.method) {
+//     case "DELETE":
+//       await handleDelete(form.get("subtaskId"));
+//       break;
+//   }
+//   return true;
+// }
 
 
 
