@@ -1,20 +1,15 @@
-/** @type {import('@remix-run/dev').AppConfig} */
-module.exports = {
+export default {
   tailwind: true,
-  cacheDirectory: "./node_modules/.cache/remix",
-  ignoredRouteFiles: [".*", "**/*.css", "**/*.test.{js,jsx,ts,tsx}"],
-  appDirectory: "app",
-  assetsBuildDirectory: "public/build",
-  serverBuildPath: "build/index.mjs",
-  publicPath: "/build/",
-  devServerPort: 8002,
+  ignoredRouteFiles: ["**/.*"],
   serverModuleFormat: "esm",
-  target: "es2020",
-  future: {
-    unstable_dev: true,
-    v2_errorBoundary: true,
-    v2_meta: true,
-    v2_normalizeFormMethod: true,
-    v2_routeConvention: true,
-  },
+  browserNodeBuiltinsPolyfill: {
+    modules: {
+      url : true,
+      path: true
+    }
+  }
+  // appDirectory: "app",
+  // assetsBuildDirectory: "public/build",
+  // publicPath: "/build/",
+  // serverBuildPath: "build/index.js",
 };
